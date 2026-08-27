@@ -9,7 +9,6 @@ export default defineConfig({
     tailwindcss(),
     vinext({
       cache: { cdn: cdnAdapter() },
-      prerender: { routes: "*" },
       react: {
         compiler: true,
       },
