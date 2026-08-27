@@ -2,11 +2,11 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
-import { paginationRange, questionHref, type QuestionFilters } from "@/lib/query";
+import { paginationRange, questionHref, type QuestionFilterState } from "@/lib/query";
 import { cn } from "@/lib/utils";
 
 interface QuestionPaginationProps {
-  readonly filters: QuestionFilters;
+  readonly filters: QuestionFilterState;
   readonly totalPages: number;
 }
 

@@ -4,14 +4,14 @@ export type SearchParams = Record<string, string | string[] | undefined>;
 
 export const PAGE_SIZE = 20;
 
-export interface QuestionFilters {
+export interface QuestionFilterState {
   readonly keyword: string | null;
   readonly difficulty: Difficulty | null;
   readonly company: string | null;
   readonly page: number;
 }
 
-export function parseQuestionFilters(params: SearchParams): QuestionFilters {
+export function parseQuestionFilters(params: SearchParams): QuestionFilterState {
   return {
     keyword: readParam(params, "q")?.trim() || null,
     difficulty: toDifficultyKey(readParam(params, "difficulty")),
@@ -20,7 +20,7 @@ export function parseQuestionFilters(params: SearchParams): QuestionFilters {
   };
 }
 
-export function questionHref(filters: QuestionFilters): string {
+export function questionHref(filters: QuestionFilterState): string {
   const params = new URLSearchParams();
   if (filters.keyword !== null) params.set("q", filters.keyword);
   if (filters.difficulty !== null) params.set("difficulty", filters.difficulty);
