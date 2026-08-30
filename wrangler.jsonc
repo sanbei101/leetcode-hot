@@ -4,6 +4,7 @@
   "compatibility_date": "2026-08-27",
   "compatibility_flags": ["nodejs_compat"],
   "main": "vinext/server/fetch-handler",
+  "preview_urls": false,
   "assets": {
     "directory": "dist/client",
     "not_found_handling": "none",
@@ -34,4 +35,10 @@
       "head_sampling_rate": 1,
     },
   },
+  "kv_namespaces": [
+    {
+      "binding": "CACHE_KV",
+      "id": "7a3665fe00224d98860926ac8795b0bb",
+    },
+  ],
 }

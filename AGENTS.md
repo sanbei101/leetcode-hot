@@ -62,6 +62,8 @@ CREATE TABLE IF NOT EXISTS codetop_questions (
 CREATE INDEX IF NOT EXISTS idx_q_difficulty ON codetop_questions(difficulty);
 CREATE INDEX IF NOT EXISTS idx_q_freq ON codetop_questions(global_freq DESC);
 CREATE INDEX IF NOT EXISTS idx_q_slug ON codetop_questions(slug);
+CREATE INDEX IF NOT EXISTS idx_q_last_seen ON codetop_questions(last_seen);
+CREATE INDEX IF NOT EXISTS idx_q_difficulty_freq ON codetop_questions(difficulty, global_freq DESC);
 
 -- 2. Company-Specific Question Frequency
 CREATE TABLE IF NOT EXISTS codetop_company_questions (
@@ -75,6 +77,7 @@ CREATE TABLE IF NOT EXISTS codetop_company_questions (
 
 CREATE INDEX IF NOT EXISTS idx_cq_company ON codetop_company_questions(company);
 CREATE INDEX IF NOT EXISTS idx_cq_company_freq ON codetop_company_questions(company, freq DESC);
+CREATE INDEX IF NOT EXISTS idx_cq_question ON codetop_company_questions(question_no);
 ```
 
 ---
