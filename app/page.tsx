@@ -2,8 +2,7 @@ import { SparklesIcon } from "lucide-react";
 import { Suspense } from "react";
 
 import { QuestionFilters } from "@/components/question-filters";
-import { QuestionPagination } from "@/components/question-pagination";
-import { QuestionTable } from "@/components/question-table";
+import { QuestionTableBrowser } from "@/components/question-table-browser";
 import { StatsSection } from "@/components/stats-section";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -11,7 +10,6 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -69,8 +67,6 @@ async function QuestionBoard({ filters }: { readonly filters: QuestionFilterStat
     }),
   ]);
 
-  const maxFreq = questionPage.items.reduce((max, item) => Math.max(max, item.freq), 1);
-
   return (
     <>
       <StatsSection overview={overview} />
@@ -91,13 +87,8 @@ async function QuestionBoard({ filters }: { readonly filters: QuestionFilterStat
           </CardAction>
         </CardHeader>
         <CardContent className="px-0">
-          <QuestionTable items={questionPage.items} maxFreq={maxFreq} />
+          <QuestionTableBrowser filters={filters} initialPage={questionPage} />
         </CardContent>
-        {questionPage.totalPages > 1 && (
-          <CardFooter>
-            <QuestionPagination filters={filters} totalPages={questionPage.totalPages} />
-          </CardFooter>
-        )}
       </Card>
     </>
   );

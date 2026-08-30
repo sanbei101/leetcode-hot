@@ -1,79 +1,82 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import Link from "next/link";
+"use client";
 
-import { buttonVariants } from "@/components/ui/button";
-import { paginationRange, questionHref, type QuestionFilterState } from "@/lib/query";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { paginationRange, type PaginationItem } from "@/lib/query";
 import { cn } from "@/lib/utils";
 
 interface QuestionPaginationProps {
-  readonly filters: QuestionFilterState;
+  readonly page: number;
   readonly totalPages: number;
+  readonly disabled?: boolean;
+  readonly onPageChange: (page: number) => void;
 }
 
-export function QuestionPagination({ filters, totalPages }: QuestionPaginationProps) {
-  const pages = paginationRange(filters.page, totalPages);
+export function QuestionPagination({
+  page,
+  totalPages,
+  disabled = false,
+  onPageChange,
+}: QuestionPaginationProps) {
+  const pages = paginationRange(page, totalPages);
+
+  const renderItem = (item: PaginationItem, index: number) => {
+    if (item === "ellipsis") {
+      return (
+        <span
+          key={`ellipsis-${index}`}
+          className="text-muted-foreground flex size-7 items-center justify-center text-xs"
+        >
+          …
+        </span>
+      );
+    }
+    const isCurrent = item === page;
+    return (
+      <Button
+        key={item}
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        disabled={disabled || isCurrent}
+        aria-current={isCurrent ? "page" : undefined}
+        aria-label={`第 ${item} 页`}
+        onClick={() => onPageChange(item)}
+        className={cn("px-0 text-xs tabular-nums", isCurrent && "bg-muted text-foreground")}
+      >
+        {item}
+      </Button>
+    );
+  };
 
   return (
     <nav aria-label="分页" className="flex w-full items-center justify-between gap-2">
       <span className="text-muted-foreground text-xs">
-        第 {filters.page} / {totalPages} 页
+        第 {page} / {totalPages} 页
       </span>
       <div className="flex items-center gap-1">
-        {filters.page > 1 ? (
-          <Link
-            href={questionHref({ ...filters, page: filters.page - 1 })}
-            aria-label="上一页"
-            className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
-          >
-            <ChevronLeftIcon />
-          </Link>
-        ) : (
-          <span
-            aria-disabled
-            className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "opacity-50")}
-          >
-            <ChevronLeftIcon />
-          </span>
-        )}
-        {pages.map((page, index) =>
-          page === "ellipsis" ? (
-            <span
-              key={`ellipsis-${index}`}
-              className="text-muted-foreground flex size-7 items-center justify-center text-xs"
-            >
-              …
-            </span>
-          ) : (
-            <Link
-              key={page}
-              href={questionHref({ ...filters, page })}
-              aria-current={page === filters.page ? "page" : undefined}
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "icon-sm" }),
-                "px-0 text-xs tabular-nums",
-                page === filters.page && "bg-muted text-foreground",
-              )}
-            >
-              {page}
-            </Link>
-          ),
-        )}
-        {filters.page < totalPages ? (
-          <Link
-            href={questionHref({ ...filters, page: filters.page + 1 })}
-            aria-label="下一页"
-            className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
-          >
-            <ChevronRightIcon />
-          </Link>
-        ) : (
-          <span
-            aria-disabled
-            className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "opacity-50")}
-          >
-            <ChevronRightIcon />
-          </span>
-        )}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          disabled={disabled || page <= 1}
+          aria-label="上一页"
+          onClick={() => onPageChange(page - 1)}
+        >
+          <ChevronLeftIcon />
+        </Button>
+        {pages.map(renderItem)}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          disabled={disabled || page >= totalPages}
+          aria-label="下一页"
+          onClick={() => onPageChange(page + 1)}
+        >
+          <ChevronRightIcon />
+        </Button>
       </div>
     </nav>
   );

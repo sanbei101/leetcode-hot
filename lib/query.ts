@@ -30,6 +30,15 @@ export function questionHref(filters: QuestionFilterState): string {
   return query === "" ? "/" : `/?${query}`;
 }
 
+export function questionApiHref(filters: QuestionFilterState): string {
+  const params = new URLSearchParams();
+  if (filters.keyword !== null) params.set("q", filters.keyword);
+  if (filters.difficulty !== null) params.set("difficulty", filters.difficulty);
+  if (filters.company !== null) params.set("company", filters.company);
+  params.set("page", String(filters.page));
+  return `/api/questions?${params.toString()}`;
+}
+
 export type PaginationItem = number | "ellipsis";
 
 export function paginationRange(current: number, total: number): readonly PaginationItem[] {
